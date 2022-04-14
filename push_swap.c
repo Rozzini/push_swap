@@ -6,6 +6,62 @@ typedef struct node {
     struct node * next;
 } node_t;
 
+int		error_non_num(int argc, char **argv)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	while (i <argc)
+	{
+		j = 0;
+		while (argv[i][j] != '\0')
+		{
+			if (argv[i][j] < '0' || argv[i][j] > '9')
+				return (1);
+			j++;
+		}
+		i++;
+	}
+	return (0);	 
+}
+
+int		error_dup(int argc, char **argv)
+{
+	int	current;
+	int	temp;
+	int	i;
+	int	j;
+
+	i = 1;
+	j = 0;
+	while (i < argc)
+	{
+		current = atoi(argv[i]);
+		j = 1 + i;
+		while (j < argc)
+		{
+			temp = atoi(argv[j]);
+			if (current == temp)
+				return (1);
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
+int		check_errors(int argc, char **argv)
+{
+	if (argc <= 1)
+		return (1);
+	if (error_non_num(argc, argv) == 1)
+		return (1);
+	if (error_dup(argc, argv) == 1)
+		return (1);
+	return (0);
+}
+
 node_t	*find_last(node_t *lst)
 {
 	node_t	*node;
@@ -183,6 +239,11 @@ int main(int argc, char **argv)
 	node_t	*b;
 	int		i;
 
+	if (check_errors(argc, argv) == 1)
+	{
+		printf("Error\n");
+		return (0);
+	}
 	a = NULL;
 	b = NULL;
 	i = argc - 1;
@@ -194,5 +255,5 @@ int main(int argc, char **argv)
 	rra(&a);
 	ra(&a);
 	print_list(a);
-	return 0;
+	return (0);
 }
