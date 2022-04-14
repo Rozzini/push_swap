@@ -6,6 +6,36 @@ typedef struct node {
     struct node * next;
 } node_t;
 
+node_t	*find_last(node_t *lst)
+{
+	node_t	*node;
+
+	if (lst == NULL)
+		return (0);
+	node = lst;
+	while (node->next != NULL)
+	{
+		node = node->next;
+	}
+	return (node);
+}
+
+node_t	*find_pre_last(node_t *lst)
+{
+	node_t	*node;
+	node_t	*temp;
+
+	if (lst == NULL)
+		return (0);
+	node = lst;
+	while (node->next != NULL)
+	{
+		temp = node;
+		node = node->next;
+	}
+	return (temp);
+}
+
 void deleteNode(node_t **head_ref)
 {
     node_t *temp = *head_ref;
@@ -65,59 +95,87 @@ void ss(node_t *a, node_t *b)
 	sb(b);
 }
 
-// void pa()
-// {
-
-// }
-
-void pb(node_t *a, node_t *b)
+void pa(node_t **a, node_t **b)
 {
 	node_t *temp;
 
-	temp = a;
-	a = a->next;
-	if (b == NULL)
-	{
-		b = temp;
-		b->next = NULL;
-	}
-	else
-	{
-		temp->next = b;
-		b = temp;
-	}
-	deleteNode(&temp);
+	temp = *b;
+	push(a, temp->data);
+	deleteNode(b);
 }
 
-// void ra()
-// {
+void pb(node_t **a, node_t **b)
+{
+	node_t *temp;
 
-// }
+	temp = *a;
+	push(b, temp->data);
+	deleteNode(a);
+}
 
-// void rb()
-// {
+void ra(node_t **a)
+{
+	node_t *first;
+	node_t *last;
 
-// }
+	first = *a;
+	last = find_last(*a);
+	last->next = first;
+	(* a) = first->next;
+	first->next = NULL;
+}
 
-// void rr()
-// {
+void rb(node_t **b)
+{
+	node_t *first;
+	node_t *last;
 
-// }
+	first = *b;
+	last = find_last(*b);
+	last->next = first;
+	(* b) = first->next;
+	first->next = NULL;
+}
 
-// void rra()
-// {
+void rr(node_t **a, node_t **b)
+{
+	ra(a);
+	rb(b);
+}
 
-// }
+void rra(node_t **a)
+{
+	node_t *first;
+	node_t *last;
+	node_t *prelast;
 
-// void rrb()
-// {
+	first = *a;
+	prelast = find_pre_last(*a);
+	last = find_last(*a);
+	prelast->next = NULL;
+	last->next = first;
+	(* a) = last;
+}
 
-// }
+void rrb(node_t **b)
+{
+	node_t *first;
+	node_t *last;
+	node_t *prelast;
 
-// void rrr()
-// {
+	first = *b;
+	prelast = find_pre_last(*b);
+	last = find_last(*b);
+	prelast->next = NULL;
+	last->next = first;
+	(* b) = last;
+}
 
-// }
+void rrr(node_t **a, node_t **b)
+{
+	rra(a);
+	rrb(b);
+}
 
 int main(int argc, char **argv)
 {
@@ -133,17 +191,8 @@ int main(int argc, char **argv)
 		push(&a, atoi(argv[i]));
 		i--;
 	}
-	printf("list a:\n");
+	rra(&a);
+	ra(&a);
 	print_list(a);
-	printf("---------------------------------\n");
-	printf("list b:\n");
-	print_list(b);
-	printf("0000000000000000000000000000000000\n");
-	pb(a, b);
-	printf("list a:\n");
-	print_list(a);
-	printf("---------------------------------\n");
-	printf("list b:\n");
-	print_list(b);
 	return 0;
 }
