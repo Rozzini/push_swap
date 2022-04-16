@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "libft/libft.h"
 
 typedef struct node {
     int data;
+	int i;
     struct node * next;
 } node_t;
 
@@ -12,7 +14,7 @@ int		error_non_num(int argc, char **argv)
 	int	j;
 
 	i = 1;
-	while (i <argc)
+	while (i < argc)
 	{
 		j = 0;
 		while (argv[i][j] != '\0')
@@ -28,7 +30,7 @@ int		error_non_num(int argc, char **argv)
 
 int		error_dup(int argc, char **argv)
 {
-	int	current;
+	long long	current;
 	int	temp;
 	int	i;
 	int	j;
@@ -37,11 +39,13 @@ int		error_dup(int argc, char **argv)
 	j = 0;
 	while (i < argc)
 	{
-		current = atoi(argv[i]);
+		current = ft_atoi(argv[i]);
+		if (current > 2147483647 || current < -2147483648)
+			return (1);
 		j = 1 + i;
 		while (j < argc)
 		{
-			temp = atoi(argv[j]);
+			temp = ft_atoi(argv[j]);
 			if (current == temp)
 				return (1);
 			j++;
@@ -97,6 +101,7 @@ void deleteNode(node_t **head_ref)
     node_t *temp = *head_ref;
 	node_t *prev;
  
+	prev = NULL;
     if(temp != NULL) 
 	{
         *head_ref = temp->next;
@@ -107,22 +112,24 @@ void deleteNode(node_t **head_ref)
     free(temp);
 }
 
-void push(node_t **head_ref, int new_data)
+void push(node_t **head_ref, int i, int new_data)
 {
 	
     node_t *new_node;
 
 	new_node = (node_t *) malloc(sizeof(node_t));
     new_node->data  = new_data;
+	new_node->i		= i;
 	new_node->next = (*head_ref);
     (*head_ref)    = new_node;
 }
 
-void print_list(node_t * head) {
+void print_list(node_t * head) 
+{
     node_t * current = head;
 
     while (current != NULL) {
-        printf("%d ::: %p\n", current->data, current->next);
+        printf("%d ::: %d\n", current->data, current->i);
         current = current->next;
     }
 }
@@ -156,7 +163,7 @@ void pa(node_t **a, node_t **b)
 	node_t *temp;
 
 	temp = *b;
-	push(a, temp->data);
+	push(a, 0, temp->data);
 	deleteNode(b);
 }
 
@@ -165,7 +172,7 @@ void pb(node_t **a, node_t **b)
 	node_t *temp;
 
 	temp = *a;
-	push(b, temp->data);
+	push(b, 0, temp->data);
 	deleteNode(a);
 }
 
@@ -233,6 +240,104 @@ void rrr(node_t **a, node_t **b)
 	rrb(b);
 }
 
+int	check_sort(node_t *head)
+{
+	node_t * current = head;
+
+    while (current->next != NULL) 
+	{
+        if (current->data > current->next->data)
+			return (1);
+        current = current->next;
+    }
+	return (0);
+}
+
+int		find_max(node_t *head)
+{
+	node_t	*current = head;
+	int		max;
+	int		i;
+
+	i = current->i;
+	max	= current->data;
+	while (current != NULL)
+	{
+		if (current->data > max)
+		{
+			max = current->data;
+			i = current->i;
+		}
+		current = current->next;
+	}
+	return (i);
+}
+
+int		find_min(node_t *head)
+{
+	node_t	*current = head;
+	int		min;
+	int		i;
+
+	i = current->i;
+	min	= current->data;
+	while (current != NULL)
+	{
+		if (current->data < min)
+		{
+			min = current->data;
+			i = current->i;
+		}
+		current = current->next;
+	}
+	return (i);
+}
+
+int		find_last_i(node_t *head)
+{
+	node_t	*current = head;
+	int		i;
+
+	i = 0;
+	while (current != NULL)
+	{
+		i = current->i;
+		current = current->next;
+	}
+	return (i);
+}
+
+void	sort(node_t **a, node_t **b)
+{
+	int	i_max;
+	int i_min;
+	int	all;
+	int	i;
+
+	i = 1;
+	all = find_last_i(*a);
+	i_max = find_max(*a);
+	i_min = find_min(*a);
+	if (i_min <= all - i_max && i_min != 1)
+	{
+		while(i < i_min)
+		{
+			printf("here: %d\n", i);
+			ra(a);
+			i++;
+		}
+	}
+	else if (all - i_max < i_min && i_max != all)
+	{
+		while(i < all - i_max + 2)
+		{
+			rra(a);
+			i++;
+		}
+	}
+	i = (int)b;
+}
+
 int main(int argc, char **argv)
 {
     node_t	*a;
@@ -249,11 +354,17 @@ int main(int argc, char **argv)
 	i = argc - 1;
 	while (i > 0)
 	{
-		push(&a, atoi(argv[i]));
+		push(&a, i, ft_atoi(argv[i]));
 		i--;
 	}
-	rra(&a);
-	ra(&a);
 	print_list(a);
+	printf("min: %d\nmax: %d\n", find_min(a), find_max(a));
+	printf("size: %d\n", find_last_i(a));
+	sort (&a, &b);
+	print_list(a);
+	if (check_sort(a) == 0)
+		printf("sorted\n");
+	else
+		printf("not sorted\n");
 	return (0);
 }
