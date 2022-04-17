@@ -8,6 +8,22 @@ typedef struct node {
     struct node * next;
 } node_t;
 
+typedef struct data {
+	int	i_max;
+	int i_min;
+
+	int max_m_t;
+	int max_m_b;
+	
+	int min_m_t;
+	int min_m_b;
+
+	// 0 - r || 1 - rr
+	int	direction;
+	int moves;
+	int	size;
+} data_t;
+
 int		error_non_num(int argc, char **argv)
 {
 	int	i;
@@ -96,7 +112,7 @@ node_t	*find_pre_last(node_t *lst)
 	return (temp);
 }
 
-void deleteNode(node_t **head_ref)
+void	deleteNode(node_t **head_ref)
 {
     node_t *temp = *head_ref;
 	node_t *prev;
@@ -112,7 +128,7 @@ void deleteNode(node_t **head_ref)
     free(temp);
 }
 
-void push(node_t **head_ref, int i, int new_data)
+void	push(node_t **head_ref, int i, int new_data)
 {
 	
     node_t *new_node;
@@ -124,17 +140,28 @@ void push(node_t **head_ref, int i, int new_data)
     (*head_ref)    = new_node;
 }
 
-void print_list(node_t * head) 
+void	print_list(node_t *a, node_t *b) 
 {
-    node_t * current = head;
+    node_t *current_a = a;
+	node_t *current_b = b;
 
-    while (current != NULL) {
-        printf("%d ::: %d\n", current->data, current->i);
-        current = current->next;
+	printf("-------\n");
+    while (current_a != NULL || current_b != NULL) {
+		if (current_a == NULL)
+        	printf("- ::: %d\n",current_b->data);
+		else if (current_b == NULL)
+			printf("%d ::: -\n", current_a->data);
+		else
+			printf("%d ::: %d\n", current_a->data, current_b->data);
+		if (current_a != NULL)
+        	current_a = current_a->next;
+		if (current_b != NULL)
+		current_b = current_b->next;
     }
+	printf("A --- B\n");
 }
 
-void sa(node_t *a)
+void	sa(node_t *a)
 {
 	int		x;
 
@@ -143,7 +170,7 @@ void sa(node_t *a)
 	a->next->data = x;
 }
 
-void sb(node_t *b)
+void	sb(node_t *b)
 {
 	int		x;
 
@@ -152,13 +179,13 @@ void sb(node_t *b)
 	b->next->data = x;
 }
 
-void ss(node_t *a, node_t *b)
+void	ss(node_t *a, node_t *b)
 {
 	sa(a);
 	sb(b);
 }
 
-void pa(node_t **a, node_t **b)
+void	pa(node_t **a, node_t **b)
 {
 	node_t *temp;
 
@@ -167,7 +194,7 @@ void pa(node_t **a, node_t **b)
 	deleteNode(b);
 }
 
-void pb(node_t **a, node_t **b)
+void	pb(node_t **a, node_t **b)
 {
 	node_t *temp;
 
@@ -176,7 +203,7 @@ void pb(node_t **a, node_t **b)
 	deleteNode(a);
 }
 
-void ra(node_t **a)
+void	ra(node_t **a)
 {
 	node_t *first;
 	node_t *last;
@@ -188,7 +215,7 @@ void ra(node_t **a)
 	first->next = NULL;
 }
 
-void rb(node_t **b)
+void	rb(node_t **b)
 {
 	node_t *first;
 	node_t *last;
@@ -200,13 +227,13 @@ void rb(node_t **b)
 	first->next = NULL;
 }
 
-void rr(node_t **a, node_t **b)
+void	rr(node_t **a, node_t **b)
 {
 	ra(a);
 	rb(b);
 }
 
-void rra(node_t **a)
+void	rra(node_t **a)
 {
 	node_t *first;
 	node_t *last;
@@ -220,7 +247,7 @@ void rra(node_t **a)
 	(* a) = last;
 }
 
-void rrb(node_t **b)
+void	rrb(node_t **b)
 {
 	node_t *first;
 	node_t *last;
@@ -234,13 +261,13 @@ void rrb(node_t **b)
 	(* b) = last;
 }
 
-void rrr(node_t **a, node_t **b)
+void	rrr(node_t **a, node_t **b)
 {
 	rra(a);
 	rrb(b);
 }
 
-int	check_sort(node_t *head)
+int		check_sort(node_t *head)
 {
 	node_t * current = head;
 
@@ -307,38 +334,69 @@ int		find_last_i(node_t *head)
 	return (i);
 }
 
-void	sort(node_t **a, node_t **b)
+void	reset_i(node_t *head)
 {
-	int	i_max;
-	int i_min;
-	int	all;
-	int	i;
+	node_t	*current = head;
+	int		i;
 
 	i = 1;
-	all = find_last_i(*a);
-	i_max = find_max(*a);
-	i_min = find_min(*a);
-	if (i_min <= all - i_max && i_min != 1)
+	while (current != NULL)
 	{
-		while(i < i_min)
-		{
-			printf("here: %d\n", i);
-			ra(a);
-			i++;
-		}
+		current->i = i;
+		i++;
+		current = current->next;
 	}
-	else if (all - i_max < i_min && i_max != all)
-	{
-		while(i < all - i_max + 2)
-		{
-			rra(a);
-			i++;
-		}
-	}
-	i = (int)b;
 }
 
-int main(int argc, char **argv)
+void	calc_pos(data_t *data, node_t *a)
+{
+	data->size = find_last_i(a);
+	data->i_max = find_max(a);
+	data->i_min = find_min(a);
+	data->max_m_t = data->i_max - 1;
+	data->min_m_t = data->i_min - 1;
+	data->max_m_b = data->size - data->i_max + 1;
+	data->min_m_b = data->size - data->i_min + 1;
+	data->moves = data->max_m_t;
+	data->direction = 0;
+	if(data->moves > data->min_m_t)
+		data->moves = data->min_m_t;
+	if (data->moves > data->min_m_b)
+	{
+		data->moves = data->min_m_b;
+		data->direction = 1;
+	}
+	if (data->moves > data->max_m_b)
+	{
+		data->moves = data->max_m_b;
+		data->direction = 1;
+	}
+}
+
+void	sort(node_t **a, node_t **b)
+{
+		data_t	data;
+	int		i;
+	int		j = 0;
+	while (/*head_a->next != NULL*/j < 5)
+	{
+		i = 0;
+		calc_pos(&data, *a);
+		while (i < data.moves)
+		{
+			if (data.direction == 0)
+				ra(a);
+			else
+				rra(a);
+			i++;
+		}
+		pb(a, b);
+		printf("moves: %d\n", i);
+		print_list(*a, *b);
+	}
+}
+
+int		main(int argc, char **argv)
 {
     node_t	*a;
 	node_t	*b;
@@ -357,11 +415,8 @@ int main(int argc, char **argv)
 		push(&a, i, ft_atoi(argv[i]));
 		i--;
 	}
-	print_list(a);
-	printf("min: %d\nmax: %d\n", find_min(a), find_max(a));
-	printf("size: %d\n", find_last_i(a));
-	sort (&a, &b);
-	print_list(a);
+	print_list(a, b);
+	sort(&a, &b);
 	if (check_sort(a) == 0)
 		printf("sorted\n");
 	else
