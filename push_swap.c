@@ -5,6 +5,7 @@
 typedef struct node {
     int data;
 	int i;
+	int	pos;
     struct node * next;
 } node_t;
 
@@ -128,7 +129,7 @@ void	deleteNode(node_t **head_ref)
     free(temp);
 }
 
-void	push(node_t **head_ref, int i, int new_data)
+void	push(node_t **head_ref, int i, int new_data, int pos)
 {
 	
     node_t *new_node;
@@ -136,6 +137,7 @@ void	push(node_t **head_ref, int i, int new_data)
 	new_node = (node_t *) malloc(sizeof(node_t));
     new_node->data  = new_data;
 	new_node->i		= i;
+	new_node->pos	= pos;
 	new_node->next = (*head_ref);
     (*head_ref)    = new_node;
 }
@@ -148,17 +150,17 @@ void	print_list(node_t *a, node_t *b)
 	printf("-------\n");
     while (current_a != NULL || current_b != NULL) {
 		if (current_a == NULL)
-        	printf("- ::: %d\n",current_b->data);
+        	printf("- pos: - ::: %d pos: %d\n",current_b->data, current_b->pos);
 		else if (current_b == NULL)
-			printf("%d ::: -\n", current_a->data);
+			printf("%d pos: %d ::: - pos: - \n", current_a->data, current_a->pos);
 		else
-			printf("%d ::: %d\n", current_a->data, current_b->data);
+			printf("%d pos: %d ::: %d pos: %d \n", current_a->data, current_a->pos, current_b->data, current_b->pos);
 		if (current_a != NULL)
         	current_a = current_a->next;
 		if (current_b != NULL)
 		current_b = current_b->next;
     }
-	printf("A --- B\n");
+	printf("   A    ---   B   \n");
 }
 
 void	sa(node_t *a)
@@ -190,7 +192,7 @@ void	pa(node_t **a, node_t **b)
 	node_t *temp;
 
 	temp = *b;
-	push(a, 0, temp->data);
+	push(a, 0, temp->data, temp->pos);
 	deleteNode(b);
 }
 
@@ -199,7 +201,7 @@ void	pb(node_t **a, node_t **b)
 	node_t *temp;
 
 	temp = *a;
-	push(b, 0, temp->data);
+	push(b, 0, temp->data, temp->pos);
 	deleteNode(a);
 }
 
@@ -280,7 +282,7 @@ int		check_sort(node_t *head)
 	return (0);
 }
 
-int		find_max(node_t *head)
+int		find_max_i(node_t *head)
 {
 	node_t	*current = head;
 	int		max;
@@ -298,6 +300,21 @@ int		find_max(node_t *head)
 		current = current->next;
 	}
 	return (i);
+}
+
+int		find_max_data(node_t *head)
+{
+	node_t	*current = head;
+	int		max;
+
+	max	= current->data;
+	while (current != NULL)
+	{
+		if (current->data > max)
+			max = current->data;
+		current = current->next;
+	}
+	return (max);
 }
 
 int		find_min(node_t *head)
@@ -348,51 +365,57 @@ void	reset_i(node_t *head)
 	}
 }
 
-void	calc_pos(data_t *data, node_t *a)
+void	node_put_pos(node_t *head, int data, int pos)
 {
-	data->size = find_last_i(a);
-	data->i_max = find_max(a);
-	data->i_min = find_min(a);
-	data->max_m_t = data->i_max - 1;
-	data->min_m_t = data->i_min - 1;
-	data->max_m_b = data->size - data->i_max + 1;
-	data->min_m_b = data->size - data->i_min + 1;
-	data->moves = data->max_m_t;
-	data->direction = 0;
-	if(data->moves > data->min_m_t)
-		data->moves = data->min_m_t;
-	if (data->moves > data->min_m_b)
+	node_t	*current;
+
+	current = head;
+	while (current != NULL)
 	{
-		data->moves = data->min_m_b;
-		data->direction = 1;
-	}
-	if (data->moves > data->max_m_b)
-	{
-		data->moves = data->max_m_b;
-		data->direction = 1;
+		if (current->data == data)
+		{
+			current->pos = pos;
+		}
+		current = current->next;
 	}
 }
 
-void	sort(node_t **a, node_t **b)
+void	swap(int* xp, int* yp)
 {
-		data_t	data;
-	int		i;
-	int		j = 0;
-	while (/*head_a->next != NULL*/j < 5)
+	int	temp;
+	temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
+
+void	sort_arr(int *arr, int l)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < l - 1)
 	{
-		i = 0;
-		calc_pos(&data, *a);
-		while (i < data.moves)
+		j = 0;
+		while (j < l - i - 1)
 		{
-			if (data.direction == 0)
-				ra(a);
-			else
-				rra(a);
-			i++;
+			 if (arr[j] > arr[j + 1])
+                swap(&arr[j], &arr[j + 1]);
+			j++;
 		}
-		pb(a, b);
-		printf("moves: %d\n", i);
-		print_list(*a, *b);
+		i++;
+	}
+}
+
+void	find_pos(node_t *head, int *arr, int arr_l)
+{
+	int		i;
+
+	i = 0;
+	while (i < arr_l)
+	{
+		node_put_pos(head, arr[i], i + 1);
+		i++;
 	}
 }
 
@@ -401,6 +424,8 @@ int		main(int argc, char **argv)
     node_t	*a;
 	node_t	*b;
 	int		i;
+	int		j;
+	int		arr[argc - 1];
 
 	if (check_errors(argc, argv) == 1)
 	{
@@ -410,13 +435,24 @@ int		main(int argc, char **argv)
 	a = NULL;
 	b = NULL;
 	i = argc - 1;
+	j = 1;
 	while (i > 0)
 	{
-		push(&a, i, ft_atoi(argv[i]));
+		push(&a, i, ft_atoi(argv[i]), 0);
+		arr[j - 1] = ft_atoi(argv[j]);
+		j++;
 		i--;
 	}
+	for(int k = 0; k < argc - 1; k++)
+		printf("%d ,", arr[k]);
+	printf("\n");
+	sort_arr(arr, argc - 1);
+	for(int k = 0; k < argc - 1; k++)
+		printf("%d ,", arr[k]);
+	printf("\n");
+	find_pos(a, arr, argc);
+	printf("\n");
 	print_list(a, b);
-	sort(&a, &b);
 	if (check_sort(a) == 0)
 		printf("sorted\n");
 	else
