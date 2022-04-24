@@ -282,75 +282,6 @@ int		check_sort(node_t *head)
 	return (0);
 }
 
-int		find_max_i(node_t *head)
-{
-	node_t	*current = head;
-	int		max;
-	int		i;
-
-	i = current->i;
-	max	= current->data;
-	while (current != NULL)
-	{
-		if (current->data > max)
-		{
-			max = current->data;
-			i = current->i;
-		}
-		current = current->next;
-	}
-	return (i);
-}
-
-int		find_max_data(node_t *head)
-{
-	node_t	*current = head;
-	int		max;
-
-	max	= current->data;
-	while (current != NULL)
-	{
-		if (current->data > max)
-			max = current->data;
-		current = current->next;
-	}
-	return (max);
-}
-
-int		find_min(node_t *head)
-{
-	node_t	*current = head;
-	int		min;
-	int		i;
-
-	i = current->i;
-	min	= current->data;
-	while (current != NULL)
-	{
-		if (current->data < min)
-		{
-			min = current->data;
-			i = current->i;
-		}
-		current = current->next;
-	}
-	return (i);
-}
-
-int		find_last_i(node_t *head)
-{
-	node_t	*current = head;
-	int		i;
-
-	i = 0;
-	while (current != NULL)
-	{
-		i = current->i;
-		current = current->next;
-	}
-	return (i);
-}
-
 void	reset_i(node_t *head)
 {
 	node_t	*current = head;
@@ -380,43 +311,61 @@ void	node_put_pos(node_t *head, int data, int pos)
 	}
 }
 
-void	swap(int* xp, int* yp)
+int		errors_for_pos(int index, int *arr, int l)
 {
-	int	temp;
-	temp = *xp;
-    *xp = *yp;
-    *yp = temp;
-}
+	int	k;
 
-void	sort_arr(int *arr, int l)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < l - 1)
+	k = 0;
+	while (k < l)
 	{
-		j = 0;
-		while (j < l - i - 1)
-		{
-			 if (arr[j] > arr[j + 1])
-                swap(&arr[j], &arr[j + 1]);
-			j++;
-		}
-		i++;
+		if (arr[k] == index)
+			return (1);
+		k++;
 	}
+	return (0);
 }
 
-void	find_pos(node_t *head, int *arr, int arr_l)
+node_t		*find_min_node(node_t *head, int *arr, int arr_el)
 {
+	node_t	*current;
+	node_t	*result;
+	int		min;
+
+	current = head;
+	min	= 2147483647;
+	while (current != NULL)
+	{
+		if (errors_for_pos(current->i, arr, arr_el) == 0)
+		{
+			if (current->data < min)
+			{
+				min = current->data;
+				result = current;
+			}
+		}
+		current = current->next;
+	}
+	return (result);
+}
+
+void	find_pos(node_t *head, int l)
+{
+	node_t	*current;
+	int		arr[l];
 	int		i;
 
 	i = 0;
-	while (i < arr_l)
+	while (i < l)
 	{
-		node_put_pos(head, arr[i], i + 1);
+		current = find_min_node(head, arr, i );
+		current->pos = i + 1;
+		printf("cuurent info: data - %d, i - %d\n", current->data, current->i);
+		arr[i] = current->i;
 		i++;
 	}
+	for (int k = 0; k < l; k++)
+		printf("%d ,", arr[k]);
+	printf("\n");
 }
 
 int		main(int argc, char **argv)
@@ -424,8 +373,6 @@ int		main(int argc, char **argv)
     node_t	*a;
 	node_t	*b;
 	int		i;
-	int		j;
-	int		arr[argc - 1];
 
 	if (check_errors(argc, argv) == 1)
 	{
@@ -435,27 +382,13 @@ int		main(int argc, char **argv)
 	a = NULL;
 	b = NULL;
 	i = argc - 1;
-	j = 1;
 	while (i > 0)
 	{
 		push(&a, i, ft_atoi(argv[i]), 0);
-		arr[j - 1] = ft_atoi(argv[j]);
-		j++;
 		i--;
 	}
-	for(int k = 0; k < argc - 1; k++)
-		printf("%d ,", arr[k]);
-	printf("\n");
-	sort_arr(arr, argc - 1);
-	for(int k = 0; k < argc - 1; k++)
-		printf("%d ,", arr[k]);
-	printf("\n");
-	find_pos(a, arr, argc);
-	printf("\n");
 	print_list(a, b);
-	if (check_sort(a) == 0)
-		printf("sorted\n");
-	else
-		printf("not sorted\n");
+	find_pos(a, argc - 1);
+	print_list(a, b);
 	return (0);
 }
