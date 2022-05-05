@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include "libft/libft.h"
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 #pragma region Structs
+
 typedef struct node {
     int data;
 	int i;
@@ -10,22 +12,13 @@ typedef struct node {
     struct node * next;
 } node_t;
 
-typedef struct data {
-	int	i_max;
-	int i_min;
-
-	int max_m_t;
-	int max_m_b;
-	
-	int min_m_t;
-	int min_m_b;
-
-	// 0 - r || 1 - rr
-	int	direction;
-	int moves;
-	int	size;
-} data_t;
+typedef struct moves {
+    int steps;
+	int direction;
+} moves_t;
 #pragma endregion Structs
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 #pragma region main_params_validation
 int		error_non_num(int argc, char **argv)
@@ -87,7 +80,10 @@ int		check_errors(int argc, char **argv)
 }
 #pragma endregion main_params_validation
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
 #pragma region Basic_operatons_with_lists
+
 node_t	*find_last(node_t *lst)
 {
 	node_t	*node;
@@ -162,29 +158,36 @@ void	print_list(node_t *a, node_t *b)
 }
 #pragma endregion Basic_operatons_with_lists
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
 #pragma region Moves
-void	sa(node_t *a)
+void	sa(node_t *a, int flag)
 {
 	int		x;
 
 	x = a->data;
 	a->data = a->next->data;
 	a->next->data = x;
+	if (flag == 1)
+		ft_printf("sa\n");
 }
 
-void	sb(node_t *b)
+void	sb(node_t *b, int flag)
 {
 	int		x;
 
 	x = b->data;
 	b->data = b->next->data;
 	b->next->data = x;
+	if (flag == 1)
+		ft_printf("sb\n");
 }
 
 void	ss(node_t *a, node_t *b)
 {
-	sa(a);
-	sb(b);
+	sa(a, 0);
+	sb(b, 0);
+	ft_printf("ss\n");
 }
 
 void	pa(node_t **a, node_t **b)
@@ -194,6 +197,7 @@ void	pa(node_t **a, node_t **b)
 	temp = *b;
 	push(a, temp->data, 0, temp->pos);
 	deleteNode(b);
+	ft_printf("pa\n");
 }
 
 void	pb(node_t **a, node_t **b)
@@ -203,9 +207,10 @@ void	pb(node_t **a, node_t **b)
 	temp = *a;
 	push(b, temp->data, 0, temp->pos);
 	deleteNode(a);
+	ft_printf("pb\n");
 }
 
-void	ra(node_t **a)
+void	ra(node_t **a, int flag)
 {
 	node_t *first;
 	node_t *last;
@@ -215,9 +220,11 @@ void	ra(node_t **a)
 	last->next = first;
 	(* a) = first->next;
 	first->next = NULL;
+	if (flag == 1)
+		ft_printf("ra\n");
 }
 
-void	rb(node_t **b)
+void	rb(node_t **b, int flag)
 {
 	node_t *first;
 	node_t *last;
@@ -227,15 +234,18 @@ void	rb(node_t **b)
 	last->next = first;
 	(* b) = first->next;
 	first->next = NULL;
+	if (flag == 1)
+		ft_printf("rb\n");
 }
 
 void	rr(node_t **a, node_t **b)
 {
-	ra(a);
-	rb(b);
+	ra(a, 0);
+	rb(b, 0);
+	ft_printf("rr\n");
 }
 
-void	rra(node_t **a)
+void	rra(node_t **a, int flag)
 {
 	node_t *first;
 	node_t *last;
@@ -247,9 +257,11 @@ void	rra(node_t **a)
 	prelast->next = NULL;
 	last->next = first;
 	(* a) = last;
+	if (flag == 1)
+		ft_printf("rra\n");
 }
 
-void	rrb(node_t **b)
+void	rrb(node_t **b, int flag)
 {
 	node_t *first;
 	node_t *last;
@@ -261,14 +273,19 @@ void	rrb(node_t **b)
 	prelast->next = NULL;
 	last->next = first;
 	(* b) = last;
+	if (flag == 1)
+		ft_printf("rrb\n");
 }
 
 void	rrr(node_t **a, node_t **b)
 {
-	rra(a);
-	rrb(b);
+	rra(a, 0);
+	rrb(b, 0);
+	ft_printf("rrr\n");
 }
 #pragma endregion Moves
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 #pragma region helpers
 int		check_sort(node_t *head)
@@ -313,9 +330,6 @@ int		list_size(node_t *head)
 	return (i);
 }
 
-#pragma endregion helpers
-
-#pragma region Finding_Positions
 int		errors_for_pos(int index, int *arr, int l)
 {
 	int	k;
@@ -368,52 +382,266 @@ void	find_pos(node_t *head, int l)
 		i++;
 	}
 }
-#pragma endregion Finding_Positions
 
-#pragma region sorting
+#pragma endregion helpers
 
-int		find_node_i(node_t *head, int pos)
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+#pragma region positions_moves
+
+int		find_max(node_t *head)
 {
-	node_t	*current;
+	node_t *current;
+	int		max;
+	int		ret;
 
 	current = head;
-	while (current != NULL)
+	max = current->pos;
+	ret = current->i;
+	while(current != NULL)
 	{
-		if (current->pos == pos)
-			return (current->i);
+		if (current->pos > max)
+		{
+			ret = current->i;
+			max = current->pos;
+		}
 		current = current->next;
 	}
-	return (0);
+	return (ret);
 }
 
-node_t 	*sort(node_t *a, node_t *b, int size)
+int		find_min(node_t *head)
 {
-	int	i;
-	int	moves;
+	node_t *current;
+	int		min;
+	int		ret;
+
+	current = head;
+	min = current->pos;
+	ret = current->i;
+	while(current != NULL)
+	{
+		if (current->pos < min)
+		{
+			ret = current->i;
+			min = current->pos;
+		}
+		current = current->next;
+	}
+	return (ret);
+}
+
+void	count_moves(int size, int i, moves_t *moves)
+{
+	int top;
+	int bot;
+
+	top = i - 1;
+	bot = size - i + 1;
+	if (top < bot)
+	{
+		moves->steps = top;
+		moves->direction  = 0;
+	}
+	else
+	{
+		moves->steps = bot;
+		moves->direction = 1;
+	}
+}
+#pragma endregion position_moves
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+#pragma region sort3
+
+void	case31(node_t **head)
+{
+	rra(head, 1);
+	sa(*head, 1);
+}
+
+void	case32(node_t **head)
+{
+	sa(*head, 1);
+}
+
+void	case33(node_t **head)
+{
+	rra(head, 1);
+}
+
+void	case34(node_t **head)
+{
+	ra(head, 1);
+}
+
+void	case35(node_t **head)
+{
+	sa(*head, 1);
+	rra(head, 1);
+}
+
+void	check_3_swap(int *a, int *b)
+{
+	int	temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+int		check_pos(node_t *head, int j)
+{
+	int	x[3];
+
+	x[0] = head->pos;
+	x[1] = head->next->pos;
+	x[2] = head->next->next->pos;
+	if (x[0] > x[2])
+		check_3_swap(&x[0], &x[2]);
+	if (x[0] > x[1])
+		check_3_swap(&x[0], &x[1]);
+	if (x[1] > x[2])
+		check_3_swap(&x[1], &x[2]);
+	return (x[j - 1]);
+}
+
+void	sort_3(node_t **stack)
+{
+	node_t	*head;
+
+	head = *stack;
+	if (head->pos == check_pos(head, 1) && head->next->pos == check_pos(head, 3) && head->next->next->pos == check_pos(head, 2))
+		case31(stack);
+	else if (head->pos == check_pos(head, 2) && head->next->pos == check_pos(head, 1) && head->next->next->pos == check_pos(head, 3))
+		case32(stack);
+	else if (head->pos == check_pos(head, 2) && head->next->pos == check_pos(head, 3) && head->next->next->pos == check_pos(head, 1))
+		case33(stack);
+	else if (head->pos == check_pos(head, 3) && head->next->pos == check_pos(head, 1) && head->next->next->pos == check_pos(head, 2))
+		case34(stack);
+	else if (head->pos == check_pos(head, 3) && head->next->pos == check_pos(head, 2) && head->next->next->pos == check_pos(head, 1))
+		case35(stack);
+}
+
+#pragma endregion sort3
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+#pragma region sort5
+
+void	sort_5(node_t **a, node_t **b)
+{
+	int		i;
+	int		min;
+	moves_t	moves;
 
 	i = 0;
-	while (i < size)
+	while (i < 2)
 	{
-		moves = find_node_i(a, i + 1);
-		while (moves > 1)
+		min = find_min(*a);
+		count_moves(5 - i, min, &moves);
+		while (moves.steps > 0)
 		{
-			ra(&a);
-			moves--;
+			if (moves.direction == 0)
+				ra(a, 1);
+			else
+				rra(a, 1);
+			moves.steps--;
 		}
-		pb(&a, &b);
-		reset_i(a);
+		pb(a, b);
+		reset_i(*a);
 		i++;
 	}
-	i = 0;
-	while (i < size)
+	if (check_sort(*b) == 0)
+		sb(*b, 1);
+	sort_3(a);
+	pa(a, b);
+	pa(a, b);
+}
+
+#pragma endregion sort5
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+#pragma region sort
+
+void	push_back(node_t **a, node_t **b)
+{
+	node_t *b_head;
+
+	b_head = *b;
+	while (b_head->pos != 1)
 	{
-		pa(&a, &b);
-		i++;
+		pa(a, b);
+		b_head = *b;
 	}
-	return (a);
+	while (b_head->next != NULL)
+	{
+		rrb(b, 1);
+		pa(a, b);
+		ra(a, 1);
+		b_head = *b;
+	}
+	pa(a, b);
+}
+
+void	sort_more(node_t **a, node_t **b, int size)
+{
+	moves_t min;
+	moves_t max;
+	int		min_i;
+	int		max_i;
+	int		flag;
+
+	while (size > 0)
+	{
+		
+		flag = 0;
+		min_i = find_min(*a);
+		max_i = find_max(*a);
+		count_moves(size, min_i, &min);
+		count_moves(size, max_i, &max);
+		if (max.steps < min.steps)
+		{
+			min = max;
+			flag = 1;
+		}
+		while (min.steps > 0)
+		{
+			if (min.direction == 0)
+				ra(a, 1);
+			else
+				rra(a, 1);
+			min.steps--;
+		}
+		pb(a, b);
+		if (flag == 1 && list_size(*b) > 1)
+			rb(b, 1);
+		reset_i(*a);
+		size--;
+	}
+	print_list(*a, *b);
+	push_back(a, b);
+}
+#pragma endregion sort
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+#pragma region sorting
+
+void	sort(node_t **a, node_t **b, int size)
+{
+	if (size == 3)
+		sort_3(a);
+	if (size == 5)
+		sort_5(a, b);
+	else
+		sort_more(a, b, size);
 }
 
 #pragma endregion sorting
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 int		main(int argc, char **argv)
 {
@@ -437,7 +665,7 @@ int		main(int argc, char **argv)
 	i = list_size(a);
 	find_pos(a, i);
 	print_list(a, b);
-	a = sort(a, b, i);
+	sort(&a, &b, i);
 	print_list(a, b);
 	return (0);
 }
