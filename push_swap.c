@@ -568,59 +568,47 @@ void	sort_5(node_t **a, node_t **b)
 
 void	push_back(node_t **a, node_t **b)
 {
-	node_t *b_head;
+	moves_t	moves;
+	int		lst_size;
 
-	b_head = *b;
-	while (b_head->pos != 1)
+	lst_size = list_size(*b);
+	while (lst_size > 0)
 	{
+		count_moves(lst_size, find_max(*b), &moves);
+		while (moves.steps > 0)
+		{
+			if (moves.direction == 0)
+				rb(b, 1);
+			else
+				rrb(b, 1);
+			moves.steps--;
+		}
 		pa(a, b);
-		b_head = *b;
+		reset_i(*b);
+		lst_size--;
 	}
-	while (b_head->next != NULL)
-	{
-		rrb(b, 1);
-		pa(a, b);
-		ra(a, 1);
-		b_head = *b;
-	}
-	pa(a, b);
 }
 
 void	sort_more(node_t **a, node_t **b, int size)
 {
-	moves_t min;
-	moves_t max;
-	int		min_i;
-	int		max_i;
-	int		flag;
-
-	while (size > 0)
+	node_t	*a_head;
+	int		chunks;
+	int		iter;
+	int		block = 20;
+	chunks = size / block;
+	iter = 1;
+	a_head = *a;
+	while (iter <= chunks && a_head != NULL)
 	{
-		
-		flag = 0;
-		min_i = find_min(*a);
-		max_i = find_max(*a);
-		count_moves(size, min_i, &min);
-		count_moves(size, max_i, &max);
-		if (max.steps < min.steps)
-		{
-			min = max;
-			flag = 1;
-		}
-		while (min.steps > 0)
-		{
-			if (min.direction == 0)
-				ra(a, 1);
-			else
-				rra(a, 1);
-			min.steps--;
-		}
-		pb(a, b);
-		if (flag == 1 && list_size(*b) > 1)
-			rb(b, 1);
-		reset_i(*a);
-		size--;
+		if (a_head->pos >= ((iter - 1) * block) && a_head->pos <= iter * block)
+			pb(a, b);
+		else
+			ra(a, 1);
+		if (list_size(*b) == iter * block)
+			iter++;
+		a_head = *a;
 	}
+	reset_i(*b);
 	print_list(*a, *b);
 	push_back(a, b);
 }
@@ -664,8 +652,8 @@ int		main(int argc, char **argv)
 	}
 	i = list_size(a);
 	find_pos(a, i);
-	print_list(a, b);
+	//print_list(a, b);
 	sort(&a, &b, i);
-	print_list(a, b);
+	//print_list(a, b);
 	return (0);
 }
