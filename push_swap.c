@@ -20,68 +20,6 @@ typedef struct moves {
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
-#pragma region main_params_validation
-int		error_non_num(int argc, char **argv)
-{
-	int	i;
-	int	j;
-
-	i = 1;
-	while (i < argc)
-	{
-		j = 0;
-		while (argv[i][j] != '\0')
-		{
-			if (argv[i][j] < '0' || argv[i][j] > '9')
-				return (1);
-			j++;
-		}
-		i++;
-	}
-	return (0);	 
-}
-
-int		error_dup(int argc, char **argv)
-{
-	long long	current;
-	int	temp;
-	int	i;
-	int	j;
-
-	i = 1;
-	j = 0;
-	while (i < argc)
-	{
-		current = ft_atoi(argv[i]);
-		if (current > 2147483647 || current < -2147483648)
-			return (1);
-		j = 1 + i;
-		while (j < argc)
-		{
-			temp = ft_atoi(argv[j]);
-			if (current == temp)
-				return (1);
-			j++;
-		}
-		i++;
-	}
-	return (0);
-}
-
-int		check_errors(int argc, char **argv)
-{
-	if (argc <= 1)
-		return (1);
-	if (error_non_num(argc, argv) == 1)
-		return (1);
-	if (error_dup(argc, argv) == 1)
-		return (1);
-	return (0);
-}
-#pragma endregion main_params_validation
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-
 #pragma region Basic_operatons_with_lists
 
 node_t	*find_last(node_t *lst)
@@ -157,6 +95,125 @@ void	print_list(node_t *a, node_t *b)
 	printf("   A        ---       B   \n");
 }
 #pragma endregion Basic_operatons_with_lists
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+#pragma region main_params_validation
+
+int		error_non_num(int argc, char **argv)
+{
+	int	i;
+	int	j;
+	int	symb;
+
+	symb = 0;
+	i = 1;
+	while (i < argc)
+	{
+		j = 0;
+		while (argv[i][j] != '\0')
+		{
+			if (argv[i][j] == ' ')
+				j++;
+			if (argv[i][j] == '-' || argv[i][j] == '+')
+				j++;
+			if (argv[i][j] < '0' || argv[i][j] > '9')
+				return (1);
+			j++;
+		}
+		i++;
+	}
+	return (0);	 
+}
+
+int		check_spaces(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] != '\0')
+	{
+		if (s[i] == ' ')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	dup_push(char *s, node_t **a)
+{
+	long long	num;
+
+	num = ft_atoi(s);
+	if (num > 2147483647 || num < -2147483648)
+		return (-1);
+	push(a, num, 0, 0);
+	return (0);
+}
+
+int	parse(int argc, char **argv, node_t **a)
+{
+	char		**numbers;
+	int			i;
+
+	while (argc >= 2)
+	{
+		i = 0;
+		if (check_spaces(argv[argc - 1]) == 1)
+		{
+			numbers = ft_split(argv[argc - 1], ' ');
+			while (numbers[i] != NULL)
+				i++;
+			while (i > 0)
+			{
+				if (dup_push(numbers[i - 1], a) == -1)
+					return (-1);
+				i--;
+			}
+		}
+		else
+		{
+			if (dup_push(argv[argc - 1], a) == -1)
+					return (-1);
+		}
+		argc--;
+	}
+	return (1);
+}
+
+int		error_dup(node_t **a)
+{
+	node_t	*current;
+	node_t	*iter;
+
+	current = *a;
+	while (current != NULL)
+	{
+		iter = current->next;
+		while (iter != NULL)
+		{
+			if (current->data == iter->data)
+				return (1);
+			iter = iter->next;
+		}
+		current = current->next;
+	}
+	return (0);
+}
+
+int		check_errors(int argc, char **argv, node_t **a)
+{
+	if (argc <= 1)
+		return (-1);
+	if (error_non_num(argc, argv) == 1)
+		return (-1);
+	if (parse(argc, argv, a) == -1)
+		return (-1);
+	if (error_dup(a) == 1)
+		return (-1);
+	return (0);
+}
+#pragma endregion main_params_validation
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
@@ -592,13 +649,20 @@ void	push_back(node_t **a, node_t **b)
 void	sort_more(node_t **a, node_t **b, int size)
 {
 	node_t	*a_head;
-	int		chunks;
 	int		iter;
-	int		block = 20;
-	chunks = size / block;
+	int		block;
+
+	if (size > 400)
+		block = 40;
+	else if (size > 100)
+		block = 12;
+	else if (size > 50)
+		block = 8;
+	else
+		block = 4;
 	iter = 1;
 	a_head = *a;
-	while (iter <= chunks && a_head != NULL)
+	while (list_size(*a) != 0)
 	{
 		if (a_head->pos >= ((iter - 1) * block) && a_head->pos <= iter * block)
 			pb(a, b);
@@ -609,7 +673,6 @@ void	sort_more(node_t **a, node_t **b, int size)
 		a_head = *a;
 	}
 	reset_i(*b);
-	print_list(*a, *b);
 	push_back(a, b);
 }
 #pragma endregion sort
@@ -621,7 +684,7 @@ void	sort(node_t **a, node_t **b, int size)
 {
 	if (size == 3)
 		sort_3(a);
-	if (size == 5)
+	else if (size == 5)
 		sort_5(a, b);
 	else
 		sort_more(a, b, size);
@@ -635,25 +698,25 @@ int		main(int argc, char **argv)
 {
     node_t	*a;
 	node_t	*b;
-	int		i;
+	int		size;
 
-	if (check_errors(argc, argv) == 1)
-	{
-		printf("Error\n");
-		return (0);
-	}
 	a = NULL;
 	b = NULL;
-	i = argc - 1;
-	while (i > 0)
+	if (check_errors(argc, argv, &a) == -1)
 	{
-		push(&a, ft_atoi(argv[i]), i, 0);
-		i--;
+		ft_printf("Error\n");
+		return (0);
 	}
-	i = list_size(a);
-	find_pos(a, i);
-	//print_list(a, b);
-	sort(&a, &b, i);
-	//print_list(a, b);
+	if (check_sort(a) == 0)
+	{
+		ft_printf("sorted\n");
+		return (0);
+	}
+	size = list_size(a);
+	reset_i(a);
+	find_pos(a, size);
+	print_list(a, b);
+	sort(&a, &b, size);
+	print_list(a, b);
 	return (0);
 }
