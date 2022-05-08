@@ -1,38 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   check_spaces.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/08 05:16:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:39:23 by mraspors         ###   ########.fr       */
+/*   Created: 2022/05/08 01:55:00 by mraspors          #+#    #+#             */
+/*   Updated: 2022/05/08 05:31:38 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "../push_swap.h"
 
-int		main(int argc, char **argv)
+int		check_spaces(char *s)
 {
-    node_t	*a;
-	node_t	*b;
-	int		size;
+	int	i;
 
-	a = NULL;
-	b = NULL;
-	if (check_errors(argc, argv, &a) == -1)
+	i = 0;
+	while (s[i] != '\0')
 	{
-		ft_printf("Error\n");
-		return (0);
+		if (s[i] == ' ')
+			return (1);
+		i++;
 	}
-	if (check_sort(a) == 0)
-	{
-		ft_printf("sorted\n");
-		return (0);
-	}
-	size = list_size(a);
-	reset_i(a);
-	find_pos(a, size);
-	sort(&a, &b, size);
 	return (0);
 }

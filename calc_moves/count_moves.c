@@ -1,38 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   count_moves.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/08 05:16:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:39:23 by mraspors         ###   ########.fr       */
+/*   Created: 2022/05/08 02:09:19 by mraspors          #+#    #+#             */
+/*   Updated: 2022/05/08 05:34:33 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "../push_swap.h"
 
-int		main(int argc, char **argv)
+void	count_moves(int size, int i, moves_t *moves)
 {
-    node_t	*a;
-	node_t	*b;
-	int		size;
+	int top;
+	int bot;
 
-	a = NULL;
-	b = NULL;
-	if (check_errors(argc, argv, &a) == -1)
+	top = i - 1;
+	bot = size - i + 1;
+	if (top < bot)
 	{
-		ft_printf("Error\n");
-		return (0);
+		moves->steps = top;
+		moves->direction  = 0;
 	}
-	if (check_sort(a) == 0)
+	else
 	{
-		ft_printf("sorted\n");
-		return (0);
+		moves->steps = bot;
+		moves->direction = 1;
 	}
-	size = list_size(a);
-	reset_i(a);
-	find_pos(a, size);
-	sort(&a, &b, size);
-	return (0);
 }

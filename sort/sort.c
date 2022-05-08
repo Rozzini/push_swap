@@ -1,38 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   sort.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/08 05:16:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:39:23 by mraspors         ###   ########.fr       */
+/*   Created: 2022/05/08 02:16:37 by mraspors          #+#    #+#             */
+/*   Updated: 2022/05/08 05:32:50 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "../push_swap.h"
 
-int		main(int argc, char **argv)
+void	sort(node_t **a, node_t **b, int size)
 {
-    node_t	*a;
-	node_t	*b;
-	int		size;
-
-	a = NULL;
-	b = NULL;
-	if (check_errors(argc, argv, &a) == -1)
-	{
-		ft_printf("Error\n");
-		return (0);
-	}
-	if (check_sort(a) == 0)
-	{
-		ft_printf("sorted\n");
-		return (0);
-	}
-	size = list_size(a);
-	reset_i(a);
-	find_pos(a, size);
-	sort(&a, &b, size);
-	return (0);
+	if (size == 3)
+		sort_3(a);
+	else if (size == 5)
+		sort_5(a, b);
+	else
+		sort_more(a, b, size);
 }

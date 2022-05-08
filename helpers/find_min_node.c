@@ -1,38 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   find_min_node.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/08 05:16:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:39:23 by mraspors         ###   ########.fr       */
+/*   Created: 2022/05/08 02:07:00 by mraspors          #+#    #+#             */
+/*   Updated: 2022/05/08 05:34:12 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "../push_swap.h"
 
-int		main(int argc, char **argv)
+node_t	*find_min_node(node_t *head, int *arr, int arr_el)
 {
-    node_t	*a;
-	node_t	*b;
-	int		size;
+	node_t	*current;
+	node_t	*result;
+	int		min;
 
-	a = NULL;
-	b = NULL;
-	if (check_errors(argc, argv, &a) == -1)
+	current = head;
+	min	= 2147483647;
+	while (current != NULL)
 	{
-		ft_printf("Error\n");
-		return (0);
+		if (errors_for_pos(current->i, arr, arr_el) == 0)
+		{
+			if (current->data < min)
+			{
+				min = current->data;
+				result = current;
+			}
+		}
+		current = current->next;
 	}
-	if (check_sort(a) == 0)
-	{
-		ft_printf("sorted\n");
-		return (0);
-	}
-	size = list_size(a);
-	reset_i(a);
-	find_pos(a, size);
-	sort(&a, &b, size);
-	return (0);
+	return (result);
 }

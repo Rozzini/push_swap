@@ -1,38 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   dup_push.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/08 05:16:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:39:23 by mraspors         ###   ########.fr       */
+/*   Created: 2022/05/08 01:55:26 by mraspors          #+#    #+#             */
+/*   Updated: 2022/05/08 05:31:44 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "../push_swap.h"
 
-int		main(int argc, char **argv)
+int	dup_push(char *s, node_t **a)
 {
-    node_t	*a;
-	node_t	*b;
-	int		size;
+	long long	num;
 
-	a = NULL;
-	b = NULL;
-	if (check_errors(argc, argv, &a) == -1)
-	{
-		ft_printf("Error\n");
-		return (0);
-	}
-	if (check_sort(a) == 0)
-	{
-		ft_printf("sorted\n");
-		return (0);
-	}
-	size = list_size(a);
-	reset_i(a);
-	find_pos(a, size);
-	sort(&a, &b, size);
+	num = ft_atoi(s);
+	if (num > 2147483647 || num < -2147483648)
+		return (-1);
+	push(a, num, 0, 0);
 	return (0);
 }

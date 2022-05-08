@@ -1,38 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   error_dup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/08 05:16:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:39:23 by mraspors         ###   ########.fr       */
+/*   Created: 2022/05/08 01:56:12 by mraspors          #+#    #+#             */
+/*   Updated: 2022/05/08 05:31:51 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "../push_swap.h"
 
-int		main(int argc, char **argv)
+int		error_dup(node_t **a)
 {
-    node_t	*a;
-	node_t	*b;
-	int		size;
+	node_t	*current;
+	node_t	*iter;
 
-	a = NULL;
-	b = NULL;
-	if (check_errors(argc, argv, &a) == -1)
+	current = *a;
+	while (current != NULL)
 	{
-		ft_printf("Error\n");
-		return (0);
+		iter = current->next;
+		while (iter != NULL)
+		{
+			if (current->data == iter->data)
+				return (1);
+			iter = iter->next;
+		}
+		current = current->next;
 	}
-	if (check_sort(a) == 0)
-	{
-		ft_printf("sorted\n");
-		return (0);
-	}
-	size = list_size(a);
-	reset_i(a);
-	find_pos(a, size);
-	sort(&a, &b, size);
 	return (0);
 }

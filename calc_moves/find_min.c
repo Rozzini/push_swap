@@ -1,38 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   find_min.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/08 05:16:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:39:23 by mraspors         ###   ########.fr       */
+/*   Created: 2022/05/08 02:08:58 by mraspors          #+#    #+#             */
+/*   Updated: 2022/05/08 05:14:02 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "../push_swap.h"
 
-int		main(int argc, char **argv)
+int		find_min(node_t *head)
 {
-    node_t	*a;
-	node_t	*b;
-	int		size;
+	node_t *current;
+	int		min;
+	int		ret;
 
-	a = NULL;
-	b = NULL;
-	if (check_errors(argc, argv, &a) == -1)
+	current = head;
+	min = current->pos;
+	ret = current->i;
+	while(current != NULL)
 	{
-		ft_printf("Error\n");
-		return (0);
+		if (current->pos < min)
+		{
+			ret = current->i;
+			min = current->pos;
+		}
+		current = current->next;
 	}
-	if (check_sort(a) == 0)
-	{
-		ft_printf("sorted\n");
-		return (0);
-	}
-	size = list_size(a);
-	reset_i(a);
-	find_pos(a, size);
-	sort(&a, &b, size);
-	return (0);
+	return (ret);
 }

@@ -1,38 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   find_last.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/08 05:16:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:39:23 by mraspors         ###   ########.fr       */
+/*   Created: 2022/05/08 01:52:59 by mraspors          #+#    #+#             */
+/*   Updated: 2022/05/08 05:33:46 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "../push_swap.h"
 
-int		main(int argc, char **argv)
+node_t	*find_last(node_t *lst)
 {
-    node_t	*a;
-	node_t	*b;
-	int		size;
+	node_t	*node;
 
-	a = NULL;
-	b = NULL;
-	if (check_errors(argc, argv, &a) == -1)
-	{
-		ft_printf("Error\n");
+	if (lst == NULL)
 		return (0);
-	}
-	if (check_sort(a) == 0)
+	node = lst;
+	while (node->next != NULL)
 	{
-		ft_printf("sorted\n");
-		return (0);
+		node = node->next;
 	}
-	size = list_size(a);
-	reset_i(a);
-	find_pos(a, size);
-	sort(&a, &b, size);
-	return (0);
+	return (node);
 }

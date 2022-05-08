@@ -1,38 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   sort_5.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/08 05:16:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:39:23 by mraspors         ###   ########.fr       */
+/*   Created: 2022/05/08 02:15:09 by mraspors          #+#    #+#             */
+/*   Updated: 2022/05/08 05:32:43 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "../push_swap.h"
 
-int		main(int argc, char **argv)
+void	sort_5(node_t **a, node_t **b)
 {
-    node_t	*a;
-	node_t	*b;
-	int		size;
+	int		i;
+	int		min;
+	moves_t	moves;
 
-	a = NULL;
-	b = NULL;
-	if (check_errors(argc, argv, &a) == -1)
+	i = 0;
+	while (i < 2)
 	{
-		ft_printf("Error\n");
-		return (0);
+		min = find_min(*a);
+		count_moves(5 - i, min, &moves);
+		while (moves.steps > 0)
+		{
+			if (moves.direction == 0)
+				ra(a, 1);
+			else
+				rra(a, 1);
+			moves.steps--;
+		}
+		pb(a, b);
+		reset_i(*a);
+		i++;
 	}
-	if (check_sort(a) == 0)
-	{
-		ft_printf("sorted\n");
-		return (0);
-	}
-	size = list_size(a);
-	reset_i(a);
-	find_pos(a, size);
-	sort(&a, &b, size);
-	return (0);
+	if (check_sort(*b) == 0)
+		sb(*b, 1);
+	sort_3(a);
+	pa(a, b);
+	pa(a, b);
 }
