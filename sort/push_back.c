@@ -6,15 +6,15 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 02:16:06 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:32:36 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/05/11 13:19:28 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-void	push_back(node_t **a, node_t **b)
+void	push_back(t_node **a, t_node **b)
 {
-	moves_t	moves;
+	t_moves	moves;
 	int		lst_size;
 
 	lst_size = list_size(*b);

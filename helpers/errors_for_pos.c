@@ -6,13 +6,13 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 02:06:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:34:07 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/05/10 09:44:43 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-int		errors_for_pos(int index, int *arr, int l)
+int	errors_for_pos(int index, int *arr, int l)
 {
 	int	k;
 

@@ -6,16 +6,16 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 01:56:12 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:31:51 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/05/11 13:18:25 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-int		error_dup(node_t **a)
+int	error_dup(t_node **a)
 {
-	node_t	*current;
-	node_t	*iter;
+	t_node	*current;
+	t_node	*iter;
 
 	current = *a;
 	while (current != NULL)

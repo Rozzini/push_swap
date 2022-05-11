@@ -6,17 +6,24 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 02:15:09 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:32:43 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/05/11 13:19:24 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-void	sort_5(node_t **a, node_t **b)
+void	sort_3_and_push(t_node **a, t_node **b)
+{
+	sort_3(a);
+	pa(a, b);
+	pa(a, b);
+}
+
+void	sort_5(t_node **a, t_node **b)
 {
 	int		i;
 	int		min;
-	moves_t	moves;
+	t_moves	moves;
 
 	i = 0;
 	while (i < 2)
@@ -37,7 +44,5 @@ void	sort_5(node_t **a, node_t **b)
 	}
 	if (check_sort(*b) == 0)
 		sb(*b, 1);
-	sort_3(a);
-	pa(a, b);
-	pa(a, b);
+	sort_3_and_push(a, b);
 }

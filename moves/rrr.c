@@ -6,13 +6,13 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 02:00:04 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:33:25 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/05/11 13:17:40 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-void	rrr(node_t **a, node_t **b)
+void	rrr(t_node **a, t_node **b)
 {
 	rra(a, 0);
 	rrb(b, 0);

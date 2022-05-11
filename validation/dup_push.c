@@ -6,13 +6,13 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 01:55:26 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:31:44 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/05/11 13:18:22 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-int	dup_push(char *s, node_t **a)
+int	dup_push(char *s, t_node **a)
 {
 	long long	num;
 

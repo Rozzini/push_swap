@@ -6,9 +6,10 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/31 12:40:29 by mraspors          #+#    #+#             */
-/*   Updated: 2021/12/31 12:40:29 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/05/10 09:58:18 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
 int	ft_count(char const *s, char c)

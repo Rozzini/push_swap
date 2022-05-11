@@ -6,21 +6,22 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 02:05:17 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:34:03 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/05/11 13:16:27 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-int		check_sort(node_t *head)
+int	check_sort(t_node *head)
 {
-	node_t * current = head;
+	t_node	*current;
 
-    while (current->next != NULL) 
+	current = head;
+	while (current->next != NULL)
 	{
-        if (current->data > current->next->data)
+		if (current->data > current->next->data)
 			return (1);
-        current = current->next;
-    }
+		current = current->next;
+	}
 	return (0);
 }

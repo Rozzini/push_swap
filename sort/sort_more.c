@@ -6,26 +6,31 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 02:15:41 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:32:46 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/05/11 13:18:10 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-void	sort_more(node_t **a, node_t **b, int size)
+int	calc_block_size(int size)
 {
-	node_t	*a_head;
+	if (size > 400)
+		return (38);
+	else if (size > 100)
+		return (15);
+	else if (size > 50)
+		return (8);
+	else
+		return (4);
+}
+
+void	sort_more(t_node **a, t_node **b, int size)
+{
+	t_node	*a_head;
 	int		iter;
 	int		block;
 
-	if (size > 400)
-		block = 40;
-	else if (size > 100)
-		block = 12;
-	else if (size > 50)
-		block = 8;
-	else
-		block = 4;
+	block = calc_block_size(size);
 	iter = 1;
 	a_head = *a;
 	while (list_size(*a) != 0)

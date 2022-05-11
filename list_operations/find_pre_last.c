@@ -6,16 +6,16 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 01:53:08 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:33:49 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/05/11 13:17:14 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-node_t	*find_pre_last(node_t *lst)
+t_node	*find_pre_last(t_node *lst)
 {
-	node_t	*node;
-	node_t	*temp;
+	t_node	*node;
+	t_node	*temp;
 
 	if (lst == NULL)
 		return (0);

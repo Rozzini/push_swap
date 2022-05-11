@@ -6,10 +6,9 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 12:05:31 by mraspors          #+#    #+#             */
-/*   Updated: 2022/04/16 02:54:41 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/05/10 09:57:56 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 int	ft_check(const char *str, int *i)
 {
@@ -43,9 +42,9 @@ long long	ret_int(long long integer, int flag)
 
 long long	ft_atoi(const char *str)
 {
-	int				i;
+	int			i;
 	long long	integer;
-	int				flag;
+	int			flag;
 
 	integer = 0;
 	i = 0;

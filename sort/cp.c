@@ -1,22 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   deleteNode.c                                       :+:      :+:    :+:   */
+/*   cp.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/08 01:52:09 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:33:42 by mraspors         ###   ########.fr       */
+/*   Created: 2022/05/08 02:14:30 by mraspors          #+#    #+#             */
+/*   Updated: 2022/05/11 13:17:58 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-void	deleteNode(node_t **head)
+int	cp(t_node *head, int j)
 {
-	node_t	*temp;
-     
-    temp = *head;    
-    *head = (*head)->next;
-    free(temp);
+	int	x[3];
+
+	x[0] = head->pos;
+	x[1] = head->next->pos;
+	x[2] = head->next->next->pos;
+	if (x[0] > x[2])
+		check_3_swap(&x[0], &x[2]);
+	if (x[0] > x[1])
+		check_3_swap(&x[0], &x[1]);
+	if (x[1] > x[2])
+		check_3_swap(&x[1], &x[2]);
+	return (x[j - 1]);
 }

@@ -6,15 +6,15 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 01:57:18 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:33:28 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/05/11 13:17:43 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-void	sa(node_t *a, int flag)
+void	sa(t_node *a, int flag)
 {
-	int		x;
+	int	x;
 
 	x = a->data;
 	a->data = a->next->data;

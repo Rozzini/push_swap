@@ -6,18 +6,18 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 01:58:16 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:33:02 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/05/11 13:17:26 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-void	pb(node_t **a, node_t **b)
+void	pb(t_node **a, t_node **b)
 {
-	node_t *temp;
+	t_node	*temp;
 
 	temp = *a;
 	push(b, temp->data, 0, temp->pos);
-	deleteNode(a);
+	delete_node(a);
 	ft_printf("pb\n");
 }

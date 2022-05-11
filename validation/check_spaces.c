@@ -6,13 +6,13 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 01:55:00 by mraspors          #+#    #+#             */
-/*   Updated: 2022/05/08 05:31:38 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/05/10 09:49:48 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-int		check_spaces(char *s)
+int	check_spaces(char *s)
 {
 	int	i;
 
